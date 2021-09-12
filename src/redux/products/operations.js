@@ -42,12 +42,8 @@ const updateProduct = text => async dispatch => {
   dispatch(productAction.updateProductRequest());
 
   try {
-    const {
-      data: {
-        data: { product },
-      },
-    } = await axios.put(`/products/${text.productId}`, { comments: [text] });
-    dispatch(productAction.updateProductSuccess(product));
+    await axios.put(`/products/${text.productId}`, { comments: [text] });
+    dispatch(productAction.updateProductSuccess());
   } catch ({ message }) {
     dispatch(productAction.updateProductError(message));
   }

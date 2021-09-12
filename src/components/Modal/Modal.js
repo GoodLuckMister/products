@@ -44,7 +44,7 @@ export default function ModalPage({ productId, name, description }) {
     if (!valueInput.imageUrl) {
       return alert(`${valueInput.imageUrl} is empty`);
     }
-    onSubmit({ ...valueInput, productId });
+    onSubmit({ ...valueInput, ...(!productId ? {} : productId) });
     setValueInput({
       name: '',
       imageUrl: '',
@@ -82,7 +82,10 @@ export default function ModalPage({ productId, name, description }) {
               />
             </InputGroup>
             <InputGroup className="mb-3">
-              <InputGroup.Text id="basic-addon2">http://</InputGroup.Text>
+              <InputGroup.Text id="basic-addon2">
+                {' '}
+                image http://
+              </InputGroup.Text>
               <FormControl
                 value={valueInput.imageUrl}
                 onChange={changeValue}

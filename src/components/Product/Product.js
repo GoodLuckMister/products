@@ -20,7 +20,6 @@ export default function Product({ location: { state } }) {
   );
   const onSubmitClick = e => {
     e.preventDefault();
-
     onSubmit(comment);
     setComment({
       description: '',
@@ -55,9 +54,7 @@ export default function Product({ location: { state } }) {
                   type="text"
                   placeholder="Comment"
                 />
-                <Form.Text className="text-muted">
-                  Please give your comment
-                </Form.Text>
+                <Form.Text className="text-muted">Please comment</Form.Text>
               </Form.Group>
               <Button variant="primary" type="submit">
                 Comment

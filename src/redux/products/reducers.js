@@ -7,10 +7,7 @@ const items = createReducer([], {
     payload,
     ...state,
   ],
-  [productAction.updateProductSuccess]: (state, { payload }) => [
-    payload,
-    ...state,
-  ],
+  [productAction.updateProductSuccess]: (state, { payload }) => [...state],
   [productAction.deleteProductSuccess]: (state, { payload }) =>
     state.filter(({ _id }) => _id !== payload),
 });

@@ -16,7 +16,7 @@ export default function Container() {
   }, [dispatch, onFetchContact]);
   return (
     <>
-      <Modal />
+      <Modal name="Create" description="Create product" />
 
       {items.length > 0 ? <Home /> : null}
     </>

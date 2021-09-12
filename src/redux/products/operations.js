@@ -27,7 +27,6 @@ const deleteProduct = id => async dispatch => {
 };
 const fetchProduct = () => async dispatch => {
   dispatch(productAction.fetchProductRequest());
-
   try {
     const {
       data: {
@@ -39,7 +38,7 @@ const fetchProduct = () => async dispatch => {
     dispatch(productAction.fetchProductError(message));
   }
 };
-const updateProduct = () => async dispatch => {
+const updateProduct = text => async dispatch => {
   dispatch(productAction.updateProductRequest());
 
   try {
@@ -47,7 +46,7 @@ const updateProduct = () => async dispatch => {
       data: {
         data: { product },
       },
-    } = await axios.put('/products');
+    } = await axios.put(`/products/${text.productId}`, { comments: [text] });
     dispatch(productAction.updateProductSuccess(product));
   } catch ({ message }) {
     dispatch(productAction.updateProductError(message));

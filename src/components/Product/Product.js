@@ -1,101 +1,81 @@
-import { useState, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { productSelectors, productOperations } from '../../redux/products';
-import { Form, InputGroup, FormControl, Button } from 'react-bootstrap';
+import { useCallback, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { nanoid } from 'nanoid';
+import { productOperations, productSelectors } from '../../redux/products';
+import { Card, Button, Form } from 'react-bootstrap';
+import Modal from '../Modal';
 
 export default function Product({ location: { state } }) {
-  const items = useSelector(productSelectors.getItems);
-  const product = items.filter(el => el._id === state);
   const dispatch = useDispatch();
-  const [prod, setProd] = useState({
-    name: '',
-    imageUrl: '',
-    count: 0,
-    weight: '',
+  const [comment, setComment] = useState({
+    id: nanoid(),
+    productId: state,
+    description: '',
+    date: new Date().toLocaleString(),
   });
+
   const onSubmit = useCallback(
     text => dispatch(productOperations.updateProduct(text)),
     [dispatch],
   );
-
   const onSubmitClick = e => {
     e.preventDefault();
 
-    if (items.some(valueInput => prod.name === valueInput.name)) {
-      setProd({
-        name: '',
-      });
-      return alert(`${prod.name} is already in products`);
-    }
-    if (!prod.imageUrl) {
-      return alert(`${prod.imageUrl} is empty`);
-    }
-    onSubmit(prod);
-    setProd({
-      name: '',
-      imageUrl: '',
-      count: 0,
+    onSubmit(comment);
+    setComment({
+      description: '',
     });
   };
 
-  const changeValue = e => {
-    const { name, value } = e.target;
-
-    setProd(prev => ({ ...prev, [name]: value }));
-  };
-
+  const items = useSelector(productSelectors.getItems);
+  const product = items.filter(el => el._id === state);
+  if (product[0]) {
+    return (
+      <>
+        <Card style={{ width: '18rem' }}>
+          <Card.Header>Name: {product[0].name}</Card.Header>
+          <Card.Header>Count: {product[0].count}</Card.Header>
+          <Card.Header>Weight {product[0].weight}</Card.Header>
+          <Card.Img src={product[0].imageUrl}></Card.Img>
+          <Card.Body>
+            Comment:{' '}
+            {product[0].comments.map(el => (
+              <div key={el.id}>{el.description}</div>
+            ))}
+            <Form onSubmit={onSubmitClick}>
+              <Form.Group className="mb-3" controlId="formBasicText">
+                <Form.Control
+                  value={comment.description}
+                  onChange={e =>
+                    setComment(state => ({
+                      ...state,
+                      description: e.target.value,
+                    }))
+                  }
+                  type="text"
+                  placeholder="Comment"
+                />
+                <Form.Text className="text-muted">
+                  Please give your comment
+                </Form.Text>
+              </Form.Group>
+              <Button variant="primary" type="submit">
+                Comment
+              </Button>
+            </Form>
+          </Card.Body>
+          <Modal
+            productId={comment.productId}
+            name="Update"
+            description="Update product"
+          />
+        </Card>
+      </>
+    );
+  }
   return (
     <>
-      <Form onSubmit={onSubmitClick}>
-        <InputGroup className="mb-3">
-          <InputGroup.Text id="basic-addon1">{product[0].name}</InputGroup.Text>
-          <FormControl
-            value={prod.name}
-            onChange={changeValue}
-            name="name"
-            placeholder="name"
-            aria-label="name"
-            aria-describedby="basic-addon1"
-          />
-        </InputGroup>
-        <InputGroup className="mb-3">
-          <InputGroup.Text id="basic-addon2">
-            {product[0].imageUrl}
-          </InputGroup.Text>
-          <FormControl
-            value={prod.imageUrl}
-            onChange={changeValue}
-            name="imageUrl"
-            placeholder="image url"
-            aria-label="image "
-            aria-describedby="basic-addon2"
-          />
-        </InputGroup>
-        <InputGroup className="mb-3">
-          <InputGroup.Text>{product[0].count}</InputGroup.Text>
-          <FormControl
-            type="number"
-            value={prod.count}
-            onChange={changeValue}
-            name="count"
-            aria-label="Amount (to the nearest dollar)"
-          />
-        </InputGroup>
-        <InputGroup className="mb-3">
-          <InputGroup.Text id="basic-addon1">
-            {product[0].weight}
-          </InputGroup.Text>
-          <FormControl
-            value={prod.weight}
-            onChange={changeValue}
-            name="weight"
-            placeholder="weight"
-            aria-label="weight"
-            aria-describedby="basic-addon1"
-          />
-        </InputGroup>
-        <Button type="submit">update</Button>
-      </Form>
+      <h1>Change Product</h1>
     </>
   );
 }

@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Modal, InputGroup, FormControl, Form } from 'react-bootstrap';
 import { productOperations, productSelectors } from '../../redux/products';
 
-export default function ModalPage() {
+export default function ModalPage({ productId, name, description }) {
   const [show, setShow] = useState(false);
+
   const [valueInput, setValueInput] = useState({
     name: '',
     imageUrl: '',
@@ -15,10 +16,21 @@ export default function ModalPage() {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const onSubmit = useCallback(
-    text => dispatch(productOperations.addProduct(text)),
-    [dispatch],
-  );
+  let onSubmit;
+  if (name === 'Create') {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    onSubmit = useCallback(
+      text => dispatch(productOperations.addProduct(text)),
+      [dispatch],
+    );
+  }
+  if (name === 'Update') {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    onSubmit = useCallback(
+      text => dispatch(productOperations.updateProduct(text)),
+      [dispatch],
+    );
+  }
 
   const onSubmitClick = e => {
     e.preventDefault();
@@ -32,7 +44,7 @@ export default function ModalPage() {
     if (!valueInput.imageUrl) {
       return alert(`${valueInput.imageUrl} is empty`);
     }
-    onSubmit(valueInput);
+    onSubmit({ ...valueInput, productId });
     setValueInput({
       name: '',
       imageUrl: '',
@@ -50,13 +62,13 @@ export default function ModalPage() {
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
-        Create
+        {name}
       </Button>
 
       <Modal show={show} onHide={handleClose} animation={false}>
         <Form onSubmit={onSubmitClick}>
           <Modal.Header>
-            <Modal.Title>Create product</Modal.Title>
+            <Modal.Title>{description}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <InputGroup className="mb-3">
@@ -67,7 +79,6 @@ export default function ModalPage() {
                 name="name"
                 placeholder="name"
                 aria-label="name"
-                aria-describedby="basic-addon1"
               />
             </InputGroup>
             <InputGroup className="mb-3">
@@ -78,7 +89,6 @@ export default function ModalPage() {
                 name="imageUrl"
                 placeholder="image url"
                 aria-label="image "
-                aria-describedby="basic-addon2"
               />
             </InputGroup>
             <InputGroup className="mb-3">

@@ -13,12 +13,12 @@ export default function Container() {
   );
   useEffect(() => {
     onFetchContact();
-  }, [dispatch, onFetchContact]);
+  }, [dispatch, onFetchContact, items]);
   return (
     <>
       <Modal />
 
-      {items.length > 0 ? <Home items={items} /> : null}
+      {items.length > 0 ? <Home /> : null}
     </>
   );
 }

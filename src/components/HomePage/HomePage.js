@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { productOperations, productSelectors } from '../../redux/products';
@@ -9,17 +10,21 @@ export default function Home() {
   const dispatch = useDispatch();
   const onDeleteContact = id => dispatch(productOperations.deleteProduct(id));
   const items = useSelector(productSelectors.getItems);
-  const [data, setData] = useState([...items]);
+
+  const [data, setData] = useState(items);
 
   const handleChangeName = e => {
     const { value } = e.target;
     if (value === 'Name') {
-      setData([...data.sort((a, b) => (a.name > b.name ? 1 : -1))]);
+      setData([...data].sort((a, b) => (a.name > b.name ? 1 : -1)));
     }
     if (value === 'Count') {
-      setData([...data.sort((a, b) => (a.count > b.count ? 1 : -1))]);
+      setData([...data].sort((a, b) => (a.count > b.count ? 1 : -1)));
     }
   };
+  useEffect(() => {
+    setData(items);
+  }, [setData, items]);
 
   return (
     <>

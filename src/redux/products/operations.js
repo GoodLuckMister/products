@@ -45,10 +45,10 @@ const updateProduct = () => async dispatch => {
   try {
     const {
       data: {
-        data: { products },
+        data: { product },
       },
     } = await axios.put('/products');
-    dispatch(productAction.updateProductSuccess(products));
+    dispatch(productAction.updateProductSuccess(product));
   } catch ({ message }) {
     dispatch(productAction.updateProductError(message));
   }

@@ -13,7 +13,7 @@ export default function Container() {
   );
   useEffect(() => {
     onFetchContact();
-  }, [dispatch, onFetchContact, items]);
+  }, [dispatch, onFetchContact]);
   return (
     <>
       <Modal />

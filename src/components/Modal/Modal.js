@@ -91,17 +91,6 @@ export default function ModalPage() {
                 aria-label="Amount (to the nearest dollar)"
               />
             </InputGroup>
-            {/* <InputGroup className="mb-3">
-                            <InputGroup.Text id="basic-addon1">Weight</InputGroup.Text>
-                            <FormControl
-                                value={valueInput.weight}
-                                onChange={changeValue}
-                                name="weight"
-                                placeholder="weight"
-                                aria-label="weight"
-                                aria-describedby="basic-addon1"
-                            />
-                        </InputGroup> */}
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>

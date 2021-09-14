@@ -1,44 +1,59 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { nanoid } from 'nanoid';
+import { useParams } from 'react-router';
 import { productOperations, productSelectors } from '../../redux/products';
 import { Card, Button, Form } from 'react-bootstrap';
-import Modal from '../Modal';
+import Modal from './ModalForUpdate';
 
-export default function Product({ location: { state } }) {
+export default function Product() {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const [comment, setComment] = useState({
-    id: nanoid(),
-    productId: state,
     description: '',
-    date: new Date().toLocaleString(),
   });
-
   const onSubmit = useCallback(
-    text => dispatch(productOperations.updateProduct(text)),
+    text => dispatch(productOperations.updateProductComment(text)),
     [dispatch],
   );
+  const getProductOne = useCallback(
+    id => dispatch(productOperations.getProductById(id)),
+    [dispatch],
+  );
+
+  useEffect(() => {
+    getProductOne(id);
+  }, [getProductOne, id]);
+
   const onSubmitClick = e => {
     e.preventDefault();
-    onSubmit(comment);
+    onSubmit({
+      ...comment,
+      id: nanoid(),
+      productId: id,
+      date: new Date().toLocaleString(),
+    });
     setComment({
       description: '',
     });
   };
 
-  const items = useSelector(productSelectors.getItems);
-  const product = items.filter(el => el._id === state);
-  if (product[0]) {
-    return (
-      <>
+  const [item] = useSelector(productSelectors.getProduct);
+  useEffect(() => {
+    getProductOne(id);
+  }, [getProductOne, id]);
+
+  return (
+    <>
+      {item && (
         <Card style={{ width: '18rem' }}>
-          <Card.Header>Name: {product[0].name}</Card.Header>
-          <Card.Header>Count: {product[0].count}</Card.Header>
-          <Card.Header>Weight {product[0].weight}</Card.Header>
-          <Card.Img src={product[0].imageUrl}></Card.Img>
+          <Card.Header>Name: {item.name}</Card.Header>
+          <Card.Header>Count: {item.count}</Card.Header>
+          <Card.Header>Weight {item.weight}</Card.Header>
+          <Card.Img src={item.imageUrl}></Card.Img>
           <Card.Body>
             Comment:{' '}
-            {product[0].comments.map(el => (
+            {item.comments.map(el => (
               <div key={el.id}>{el.description}</div>
             ))}
             <Form onSubmit={onSubmitClick}>
@@ -46,10 +61,9 @@ export default function Product({ location: { state } }) {
                 <Form.Control
                   value={comment.description}
                   onChange={e =>
-                    setComment(state => ({
-                      ...state,
+                    setComment({
                       description: e.target.value,
-                    }))
+                    })
                   }
                   type="text"
                   placeholder="Comment"
@@ -61,18 +75,9 @@ export default function Product({ location: { state } }) {
               </Button>
             </Form>
           </Card.Body>
-          <Modal
-            productId={comment.productId}
-            name="Update"
-            description="Update product"
-          />
+          <Modal name="Update" description="Update product" />
         </Card>
-      </>
-    );
-  }
-  return (
-    <>
-      <h1>Change Product</h1>
+      )}
     </>
   );
 }

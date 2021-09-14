@@ -38,12 +38,43 @@ const fetchProduct = () => async dispatch => {
     dispatch(productAction.fetchProductError(message));
   }
 };
-const updateProduct = text => async dispatch => {
+const getProductById = id => async dispatch => {
+  dispatch(productAction.getProductRequest());
+  try {
+    const {
+      data: {
+        data: { product },
+      },
+    } = await axios.get(`/products/${id}`);
+    dispatch(productAction.getProductSuccess(product));
+  } catch ({ message }) {
+    dispatch(productAction.getProductError(message));
+  }
+};
+const updateProductComment = text => async dispatch => {
+  dispatch(productAction.updateProductCommentRequest());
+
+  try {
+    const {
+      data: {
+        data: { product },
+      },
+    } = await axios.put(`/products/${text.productId}`, { comments: [text] });
+    dispatch(productAction.updateProductCommentSuccess(product));
+  } catch ({ message }) {
+    dispatch(productAction.updateProductCommentError(message));
+  }
+};
+const updateProduct = (id, text) => async dispatch => {
   dispatch(productAction.updateProductRequest());
 
   try {
-    await axios.put(`/products/${text.productId}`, { comments: [text] });
-    dispatch(productAction.updateProductSuccess());
+    const {
+      data: {
+        data: { product },
+      },
+    } = await axios.put(`/products/${id}`, { ...text });
+    dispatch(productAction.updateProductSuccess(product));
   } catch ({ message }) {
     dispatch(productAction.updateProductError(message));
   }
@@ -53,6 +84,8 @@ const updateProduct = text => async dispatch => {
 export default {
   fetchProduct,
   deleteProduct,
+  updateProductComment,
   updateProduct,
   addProduct,
+  getProductById,
 };

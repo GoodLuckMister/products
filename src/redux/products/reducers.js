@@ -7,7 +7,6 @@ const items = createReducer([], {
     payload,
     ...state,
   ],
-  [productAction.updateProductSuccess]: (state, { payload }) => [...state],
   [productAction.deleteProductSuccess]: (state, { payload }) =>
     state.filter(({ _id }) => _id !== payload),
 });
@@ -25,10 +24,15 @@ const loading = createReducer(false, {
   [productAction.deleteProductRequest]: () => true,
   [productAction.deleteProductSuccess]: () => false,
   [productAction.deleteProductError]: () => false,
+  [productAction.getProductRequest]: () => true,
+  [productAction.getProductSuccess]: () => false,
+  [productAction.getProductError]: () => false,
 });
 
-const filter = createReducer('', {
-  [productAction.filterChanged]: (_, { payload }) => payload,
+const product = createReducer([], {
+  [productAction.getProductSuccess]: (_, { payload }) => payload,
+  [productAction.updateProductCommentSuccess]: (_, { payload }) => [payload],
+  [productAction.updateProductSuccess]: (state, { payload }) => [payload],
 });
 
-export default combineReducers({ items, filter, loading });
+export default combineReducers({ items, product, loading });

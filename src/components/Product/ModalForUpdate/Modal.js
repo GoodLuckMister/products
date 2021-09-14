@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import FormAddProduct from '../FormProduct/FormAdd';
+import FormProduct from '../FormUpdate';
 
 export default function ModalPage({ name, description }) {
   const [show, setShow] = useState(false);
@@ -16,7 +16,7 @@ export default function ModalPage({ name, description }) {
           <Modal.Title>{description}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <FormAddProduct handleClose={handleClose} />
+          <FormProduct handleClose={handleClose} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

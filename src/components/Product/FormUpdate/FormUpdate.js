@@ -24,9 +24,11 @@ export default function FormProduct({ handleClose }) {
       setValueInput({
         name: '',
       });
+      handleClose();
       return alert(`${valueInput.name} is already in products`);
     }
     if (!valueInput.imageUrl) {
+      handleClose();
       return alert(`${valueInput.imageUrl} is empty`);
     }
     onSubmit(id, { ...valueInput });

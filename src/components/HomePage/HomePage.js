@@ -5,7 +5,6 @@ import CardList from '../CardList';
 
 export default function Home() {
   const items = useSelector(productSelectors.changeFilterItems);
-
   const [data, setData] = useState(items);
   const handleChangeName = e => {
     const { value } = e.target;

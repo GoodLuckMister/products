@@ -30,6 +30,8 @@ const deleteProductRequest = createAction('products/DeleteProductRequest');
 const deleteProductSuccess = createAction('products/DeleteProductSuccess');
 const deleteProductError = createAction('products/DeleteProductError');
 
+export const filterChanged = createAction('products/Filter/Changed');
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   getProductRequest,
@@ -50,4 +52,5 @@ export default {
   updateProductCommentRequest,
   updateProductCommentSuccess,
   updateProductCommentError,
+  filterChanged,
 };

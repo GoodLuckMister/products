@@ -4,7 +4,8 @@ import { productSelectors } from '../../redux/products';
 import CardList from '../CardList';
 
 export default function Home() {
-  const items = useSelector(productSelectors.getItems);
+  const items = useSelector(productSelectors.changeFilterItems);
+
   const [data, setData] = useState(items);
   const handleChangeName = e => {
     const { value } = e.target;

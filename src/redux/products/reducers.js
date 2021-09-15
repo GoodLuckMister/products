@@ -35,4 +35,8 @@ const product = createReducer([], {
   [productAction.updateProductSuccess]: (state, { payload }) => [payload],
 });
 
-export default combineReducers({ items, product, loading });
+const filter = createReducer('', {
+  [productAction.filterChanged]: (_, { payload }) => payload,
+});
+
+export default combineReducers({ items, product, filter, loading });

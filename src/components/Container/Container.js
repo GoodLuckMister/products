@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import Home from '../HomePage';
 import Modal from '../Modal';
+import FilterProduct from '../Filter';
 import { productOperations } from '../../redux/products';
 import { useDispatch } from 'react-redux';
 
@@ -16,6 +17,7 @@ export default function Container() {
   return (
     <>
       <Modal name="Create" description="Create product" />
+      <FilterProduct></FilterProduct>
       <Home />
     </>
   );
